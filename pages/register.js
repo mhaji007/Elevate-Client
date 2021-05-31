@@ -5,7 +5,7 @@ function Register() {
 
   return (
     <div className="jumbotron h-100 p-5  text-center bg-primary square">
-      <h1>Login</h1>
+      <h1>register</h1>
     </div>
   );
 }
