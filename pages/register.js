@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
+import { SyncOutlined } from "@ant-design/icons";
 
 function Register() {
   // Jumbotron class has been removed in bootstrap 5
@@ -8,21 +9,24 @@ function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // console.table({ name, email, password });
     try {
-    const { data } = await axios.post(
-      `${process.env.NEXT_PUBLIC_API}/register`,
-      {name, email, password}
-    );
-    // console.log("REGISTER RESPONSE", data);
-    toast.success("Registration successful. Please proceed to login")
+      setLoading(true);
+      const { data } = await axios.post(
+        `${process.env.NEXT_PUBLIC_API}/register`,
+        { name, email, password }
+      );
+      // console.log("REGISTER RESPONSE", data);
+      toast.success("Registration successful. Please proceed to login");
+      setLoading(false);
     } catch (err) {
-      toast.error(err.response.data)
+      toast.error(err.response.data);
+      setLoading(false);
     }
-
   };
 
   return (
@@ -57,8 +61,12 @@ function Register() {
             required
           />
           <div class="d-grid gap-2">
-            <button type="submit" className="btn btn-primary p-2">
-              Submit
+            <button
+              type="submit"
+              className="btn btn-primary p-2"
+              disabled={!name || !email || !password || loading}
+            >
+              {loading ? <SyncOutlined spin /> : "Submit"}
             </button>
           </div>
         </form>
