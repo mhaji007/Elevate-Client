@@ -1,5 +1,6 @@
 import { useState } from "react";
-import axios from "axios"
+import axios from "axios";
+import {toast} from "react-toastify";
 
 function Register() {
   // Jumbotron class has been removed in bootstrap 5
@@ -11,11 +12,16 @@ function Register() {
   const handleSubmit = async(e) => {
     e.preventDefault();
     // console.table({ name, email, password });
+    try {
     const { data } = await axios.post(
       `${process.env.NEXT_PUBLIC_API}/register`,
       {name, email, password}
     );
-    console.log("REGISTER RESPONSE", data);
+    // console.log("REGISTER RESPONSE", data);
+    toast.success("Registration successful. Please proceed to login")
+    } catch (err) {
+      toast.error(err.response.data)
+    }
 
   };
 
