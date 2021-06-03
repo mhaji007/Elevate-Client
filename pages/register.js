@@ -1,4 +1,5 @@
 import { useState } from "react";
+import axios from "axios"
 
 function Register() {
   // Jumbotron class has been removed in bootstrap 5
@@ -7,9 +8,15 @@ function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    console.table({ name, email, password });
+    // console.table({ name, email, password });
+    const { data } = await axios.post(
+      `${process.env.NEXT_PUBLIC_API}/register`,
+      {name, email, password}
+    );
+    console.log("REGISTER RESPONSE", data);
+
   };
 
   return (
