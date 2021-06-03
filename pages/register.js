@@ -17,7 +17,7 @@ function Register() {
     try {
       setLoading(true);
       const { data } = await axios.post(
-        `${process.env.NEXT_PUBLIC_API}/register`,
+        `/api/register`,
         { name, email, password }
       );
       // console.log("REGISTER RESPONSE", data);
