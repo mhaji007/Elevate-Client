@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { SyncOutlined } from "@ant-design/icons";
+import Link from "next/link"
 
 function Register() {
   // Jumbotron class has been removed in bootstrap 5
@@ -70,6 +71,12 @@ function Register() {
             </button>
           </div>
         </form>
+        <p className="text-center p-3">
+          Already registered?{" "}
+          <Link href="/login">
+            <a>Login</a>
+          </Link>
+        </p>
       </div>
     </>
   );
