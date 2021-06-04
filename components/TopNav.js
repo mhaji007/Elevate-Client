@@ -6,6 +6,7 @@ import {
   LoginOutlined,
   LogoutOutlined,
   UserAddOutlined,
+  MenuOutlined
 } from "@ant-design/icons";
 
 import { Context } from "../context";
@@ -13,13 +14,17 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 
-const { Item } = Menu;
+const { Item, SubMenu } = Menu;
 
 function topNav() {
   // Keep track of page user is on at any moment
   const [current, setCurrent] = useState("");
 
   const { state, dispatch } = useContext(Context);
+
+  // Destructure user for conditionally
+  // displaying nav links
+  const { user } = state;
 
   const router = useRouter();
 
@@ -47,27 +52,36 @@ function topNav() {
           <a>App</a>
         </Link>
       </Item>
-      <Item
-        key="/login"
-        onClick={(e) => setCurrent(e.key)}
-        icon={<LoginOutlined />}
-      >
-        <Link href="/login">
-          <a>Login</a>
-        </Link>
-      </Item>
-      <Item
-        key="/register"
-        onClick={(e) => setCurrent(e.key)}
-        icon={<UserAddOutlined />}
-      >
-        <Link href="/register">
-          <a>Register</a>
-        </Link>
-      </Item>
-      <Item onClick={logout} icon={<LogoutOutlined />} className="">
-        Logout
-      </Item>
+
+      {user === null && (
+        <>
+          <Item
+            key="/login"
+            onClick={(e) => setCurrent(e.key)}
+            icon={<LoginOutlined />}
+          >
+            <Link href="/login">
+              <a>Login</a>
+            </Link>
+          </Item>
+          <Item
+            key="/register"
+            onClick={(e) => setCurrent(e.key)}
+            icon={<UserAddOutlined />}
+          >
+            <Link href="/register">
+              <a>Register</a>
+            </Link>
+          </Item>
+        </>
+      )}
+      {user !== null && (
+        <SubMenu icon={<MenuOutlined />} title={user&&user.name}>
+          <Item onClick={logout} icon={<LogoutOutlined />}>
+            Logout
+          </Item>
+        </SubMenu>
+      )}
     </Menu>
   );
 }
