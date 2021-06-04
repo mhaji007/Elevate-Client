@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { SyncOutlined } from "@ant-design/icons";
 import Link from "next/link"
+import { Context } from "../context";
+import { useRouter } from "next/router";
 
 function Register() {
   // Jumbotron class has been removed in bootstrap 5
@@ -12,15 +14,31 @@ function Register() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // useContext grants access to state
+  const {
+    state: { user },
+    dispatch,
+  } = useContext(Context);
+
+  // Router
+  const router = useRouter();
+
+  // On component mount redirect users away
+  // from register page if they are aleady logged in
+  useEffect(() => {
+    if (user !== null) router.push("/");
+  }, [user]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     // console.table({ name, email, password });
     try {
       setLoading(true);
-      const { data } = await axios.post(
-        `/api/register`,
-        { name, email, password }
-      );
+      const { data } = await axios.post(`/api/register`, {
+        name,
+        email,
+        password,
+      });
       // console.log("REGISTER RESPONSE", data);
       toast.success("Registration successful. Please proceed to login");
       setLoading(false);
