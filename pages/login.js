@@ -17,12 +17,11 @@ function Login() {
     try {
       setLoading(true);
       const { data } = await axios.post(`/api/login`, {
-        name,
         email,
         password,
       });
       // console.log("Login RESPONSE", data);
-      toast.success("Registration successful. Please proceed to login");
+      toast.success("Login successful. Please proceed to login");
       setLoading(false);
     } catch (err) {
       toast.error(err.response.data);
