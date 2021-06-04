@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { SyncOutlined } from "@ant-design/icons";
 import Link from "next/link";
 import {Context} from "../context";
+import {useRouter} from "next/router";
 
 function Login() {
   // Jumbotron class has been removed in bootstrap 5
@@ -11,10 +12,13 @@ function Login() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // state
+  // useContext grants access to state
   const {state, dispatch} = useContext(Context)
 
-  console.log("State", state)
+  // console.log("State", state)
+
+  // Router
+  const router = useRouter()
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -31,6 +35,18 @@ function Login() {
         type: 'LOGIN',
         payload:data
       })
+
+      // Up until now if we refresh the page
+      // the user detail from retrieved from
+      // the state is lost. We need to persist the
+      // state on page refresh
+
+      // Save user data in local storage
+      window.localStorage.setItem("user", JSON.stringify(data))
+
+      // Redirect user
+      router.push("/")
+
       // setLoading(false);
     } catch (err) {
       toast.error(err.response.data);
@@ -61,7 +77,7 @@ function Login() {
             placeholder="Enter password"
             required
           />
-          <div class="d-grid gap-2">
+          <div className="d-grid gap-2">
             <button
               type="submit"
               className="btn btn-primary p-2"
