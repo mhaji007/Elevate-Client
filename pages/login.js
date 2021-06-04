@@ -1,15 +1,20 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { SyncOutlined } from "@ant-design/icons";
 import Link from "next/link";
+import {Context} from "../context";
 
 function Login() {
   // Jumbotron class has been removed in bootstrap 5
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+
+  // state
+  const {state, dispatch} = useContext(Context)
+
+  console.log("State", state)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,8 +26,12 @@ function Login() {
         password,
       });
       // console.log("Login RESPONSE", data);
-      toast.success("Login successful. Please proceed to login");
-      setLoading(false);
+      // toast.success("Login successful. Please proceed to login");
+      dispatch({
+        type: 'LOGIN',
+        payload:data
+      })
+      // setLoading(false);
     } catch (err) {
       toast.error(err.response.data);
       setLoading(false);

@@ -5,17 +5,18 @@ import "../public/css/styles.css";
 import useIsClient from "../utils/useIsClient";
 import {ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import {Provider} from "../context";
 
 function MyApp({ Component, pageProps }) {
   const isClient = useIsClient();
   return (
     <>
       {isClient && (
-        <>
+        <Provider>
         <ToastContainer position="top-center"/>
           <TopNav />
           <Component {...pageProps} />
-        </>
+        </Provider>
       )}
     </>
   );
