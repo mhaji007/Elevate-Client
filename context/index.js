@@ -3,6 +3,8 @@
 // is lost. We need a global state management system like redux
 
 import { useReducer, createContext, useEffect } from "react";
+import axios from "axios";
+import { useRouter } from "next/router";
 
 // Initial state
 const initialState = {
@@ -28,14 +30,49 @@ const rootReducer = (state, action) => {
 const Provider = ({ children }) => {
   const [state, dispatch] = useReducer(rootReducer, initialState);
 
+  //router
+  const router = useRouter();
+
   // On component mount retrieve user details persisted in state
   // (stored in local storage) upon login and update the state
-  useEffect(() =>{
-    dispatch ({
-      type:"LOGIN",
-      payload: JSON.parse(window.localStorage.getItem("user"))
-    })
-  },[])
+  useEffect(() => {
+    dispatch({
+      type: "LOGIN",
+      payload: JSON.parse(window.localStorage.getItem("user")),
+    });
+  }, []);
+
+  // Interceptors are called for every request
+  axios.interceptors.response.use(
+    function (response) {
+      // Any status code that lies wihthin the range of 2XX cause
+      // this function to trigger;
+      return response;
+    },
+    function (error) {
+      // Any status code that falls outside the range of 2XX cause
+      // this function to trigger
+      // We can use it here to log out users with expired tokens immediately
+      let res = error.response;
+      if (res.status === 401 && res.config && !res.config.__isRetryRequest) {
+        return new Promise((resolve, reject) => {
+          axios
+            .get("/api/logout")
+            .then((data) => {
+              console.log("/401 error => logout");
+              dispatch({ type: "LOGOUT" });
+              window.localStorage.removeItem("user");
+              router.push("/login");
+            })
+            .catch((error) => {
+              console.log("Axios Interception Error", error);
+              reject(error);
+            });
+        });
+      }
+      return Promise.reject(error);
+    }
+  );
 
   return (
     // The value will be accessible using useContext(Context)
@@ -44,4 +81,4 @@ const Provider = ({ children }) => {
   );
 };
 
-export {Context, Provider}
+export { Context, Provider };
