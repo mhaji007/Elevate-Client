@@ -6,7 +6,7 @@ import {
   LoginOutlined,
   LogoutOutlined,
   UserAddOutlined,
-  MenuOutlined
+  MenuOutlined,
 } from "@ant-design/icons";
 
 import { Context } from "../context";
@@ -14,7 +14,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 
-const { Item, SubMenu } = Menu;
+const { Item, ItemGroup, SubMenu } = Menu;
 
 function topNav() {
   // Keep track of page user is on at any moment
@@ -76,10 +76,17 @@ function topNav() {
         </>
       )}
       {user !== null && (
-        <SubMenu icon={<MenuOutlined />} title={user&&user.name}>
-          <Item onClick={logout} icon={<LogoutOutlined />}>
-            Logout
-          </Item>
+        <SubMenu icon={<MenuOutlined />} title={user && user.name}>
+          <ItemGroup>
+            <Item key="/user">
+              <Link href="/user">
+                <a>Dashboard</a>
+              </Link>
+            </Item>
+            <Item onClick={logout} icon={<LogoutOutlined />}>
+              Logout
+            </Item>
+          </ItemGroup>
         </SubMenu>
       )}
     </Menu>
