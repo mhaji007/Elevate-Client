@@ -76,14 +76,18 @@ function topNav() {
         </>
       )}
       {user !== null && (
-        <SubMenu icon={<MenuOutlined />} title={user && user.name}>
+        <SubMenu
+          icon={<MenuOutlined />}
+          title={user && user.name}
+          className="float-end"
+        >
           <ItemGroup>
             <Item key="/user">
               <Link href="/user">
                 <a>Dashboard</a>
               </Link>
             </Item>
-            <Item onClick={logout} icon={<LogoutOutlined />}>
+            <Item icon={<LogoutOutlined />} onClick={logout}>
               Logout
             </Item>
           </ItemGroup>

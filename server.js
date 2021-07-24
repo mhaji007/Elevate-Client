@@ -4,10 +4,10 @@ Next.js Custom Server Setup
 
 In order to use cookie-based auth system we need to have
 client and server both running on the same origin/domain
-To accomplish this we need to user proxy because our client
+To accomplish this we need to use proxy because our client
 is running on port 3000 and our server is running on port 8000
 
-To user proxy in Next.js we need to create a custom server and
+To use proxy in Next.js we need to create a custom server and
 This custom server is only necessary for development
 In production, we will use same origin/domain and can simply
 run build and then start next app
