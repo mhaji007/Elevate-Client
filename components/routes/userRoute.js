@@ -1,18 +1,17 @@
 import { useEffect, useState, useContext } from "react";
-import { Context } from "../../context";
 import axios from "axios";
+import { useRouter } from "next/router";
+import { SyncOutlined } from "@ant-design/icons";
 
-const UserRoute = () => {
+const UserRoute = ({ children }) => {
   // state
   const [ok, setOk] = useState(false);
-
-  const {
-    state: { user },
-  } = useContext(Context);
 
   useEffect(() => {
     fetchUser();
   }, []);
+
+  const router = useRouter();
 
   const fetchUser = async () => {
     try {
@@ -21,16 +20,20 @@ const UserRoute = () => {
       if (data.ok) setOk(true);
     } catch (err) {
       console.log(err);
-      setHidden(true);
+      setOk(false);
+      router.push("/login");
     }
   };
 
   return (
     <>
-      {ok && (
-        <h1 className="jumbotron h-100 p-5  text-center bg-primary square">
-          <pre>{JSON.stringify(user, null, 4)}</pre>
-        </h1>
+      {!ok ? (
+        <SyncOutlined
+          spin
+          className="d-flex justify-content-center display-1 text-primary p-5"
+        />
+      ) : (
+        <>{children}</>
       )}
     </>
   );
