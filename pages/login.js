@@ -55,7 +55,7 @@ function Login() {
       window.localStorage.setItem("user", JSON.stringify(data));
 
       // Redirect user after successful login
-      router.push("/");
+      router.push("/user");
 
       // setLoading(false);
     } catch (err) {

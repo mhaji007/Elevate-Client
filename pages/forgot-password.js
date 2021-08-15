@@ -31,7 +31,7 @@ const ForgotPassword = () => {
   // page to users who are already logged-in
   useEffect(() => {
     if (user !== null) router.push("/");
-  }, []);
+  }, [user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -62,6 +62,7 @@ const ForgotPassword = () => {
       setCode("");
       setNewPassword("");
       setLoading(false);
+      toast("You can now login with your new password");
     } catch (err) {
       setLoading(false);
       toast(err.response.data);

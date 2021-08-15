@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { SyncOutlined } from "@ant-design/icons";
-import Link from "next/link"
+import Link from "next/link";
 import { Context } from "../context";
 import { useRouter } from "next/router";
 
@@ -41,6 +41,9 @@ function Register() {
       });
       // console.log("REGISTER RESPONSE", data);
       toast.success("Registration successful. Please proceed to login");
+      setName("");
+      setEmail("");
+      setPassword("");
       setLoading(false);
     } catch (err) {
       toast.error(err.response.data);
