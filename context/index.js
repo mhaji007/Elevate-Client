@@ -14,7 +14,7 @@ const initialState = {
 // Create context
 const Context = createContext();
 
-// root reducer
+// Root reducer
 const rootReducer = (state, action) => {
   switch (action.type) {
     case "LOGIN":
@@ -52,7 +52,7 @@ const Provider = ({ children }) => {
     function (error) {
       // Any status code that falls outside the range of 2XX cause
       // this function to trigger
-      // We can use it here to log out users with expired tokens immediately
+      // We can use it here to log out unauthorized users (e.g., users with expired tokens immediately)
       let res = error.response;
       if (res.status === 401 && res.config && !res.config.__isRetryRequest) {
         return new Promise((resolve, reject) => {

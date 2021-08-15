@@ -3,8 +3,8 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { SyncOutlined } from "@ant-design/icons";
 import Link from "next/link";
-import {Context} from "../context";
-import {useRouter} from "next/router";
+import { Context } from "../context";
+import { useRouter } from "next/router";
 
 function Login() {
   // Jumbotron class has been removed in bootstrap 5
@@ -13,8 +13,10 @@ function Login() {
   const [loading, setLoading] = useState(false);
 
   // useContext grants access to state
-  const {state:{user}, dispatch} = useContext(Context)
-
+  const {
+    state: { user },
+    dispatch,
+  } = useContext(Context);
 
   // console.log("State", state)
 
@@ -24,11 +26,9 @@ function Login() {
   // On component mount redirect users away
   // from login page if they are aleady logged in
 
-  useEffect(() =>{
-
-    if(user !== null) router.push("/")
-
-  }, [user])
+  useEffect(() => {
+    if (user !== null) router.push("/");
+  }, [user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -42,9 +42,9 @@ function Login() {
       // console.log("Login RESPONSE", data);
       // toast.success("Login successful. Please proceed to login");
       dispatch({
-        type: 'LOGIN',
-        payload:data
-      })
+        type: "LOGIN",
+        payload: data,
+      });
 
       // Up until now if we refresh the page
       // the user detail retrieved from
@@ -52,10 +52,10 @@ function Login() {
       // state on page refresh
 
       // Save user data in local storage
-      window.localStorage.setItem("user", JSON.stringify(data))
+      window.localStorage.setItem("user", JSON.stringify(data));
 
       // Redirect user after successful login
-      router.push("/")
+      router.push("/");
 
       // setLoading(false);
     } catch (err) {
@@ -91,7 +91,7 @@ function Login() {
             <button
               type="submit"
               className="btn btn-primary p-2"
-              disabled={ !email || !password || loading}
+              disabled={!email || !password || loading}
             >
               {loading ? <SyncOutlined spin /> : "Submit"}
             </button>
@@ -101,6 +101,11 @@ function Login() {
           Don't have an account?{" "}
           <Link href="/register">
             <a>Register</a>
+          </Link>
+        </p>
+        <p className="text-center pt-3">
+          <Link href="/forgot-password">
+            <a className="text-danger">Forgot password?</a>
           </Link>
         </p>
       </div>
