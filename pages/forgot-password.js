@@ -8,10 +8,14 @@ import { useRouter } from "next/router";
 
 const ForgotPassword = () => {
   // In the begining we just display the email fields
+  // User enters email, we lookup email in the database.
+  // If user if found we send the reset email to user
+  // and send back the success response
   const [email, setEmail] = useState("");
-  // After sending email to user and sending back a successful response
-  // we display the rest of the form
+  // If success response is sent back,
+  // we display the rest of the form to enter password and code
   const [success, setSuccess] = useState("");
+  // State for storing the code sent to user
   const [code, setCode] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -23,6 +27,8 @@ const ForgotPassword = () => {
   const router = useRouter();
 
   // Redirect if user is logged in
+  // There is no point in displaying the forgot password
+  // page to users who are already logged-in
   useEffect(() => {
     if (user !== null) router.push("/");
   }, []);
@@ -41,14 +47,36 @@ const ForgotPassword = () => {
     }
   };
 
+  const handleResetPassword = async (e) => {
+    e.preventDefault();
+    // console.log(email, code, newPassword);
+    // return;
+    try {
+      setLoading(true);
+      const { data } = await axios.post("/api/reset-password", {
+        email,
+        code,
+        newPassword,
+      });
+      setEmail("");
+      setCode("");
+      setNewPassword("");
+      setLoading(false);
+    } catch (err) {
+      setLoading(false);
+      toast(err.response.data);
+    }
+  };
+
   return (
     <>
       <h1 className="jumbotron h-100 p-5  text-center bg-primary square">
-        Forgot Password
+        Trouble accessing your account? Enter the email address you use for
+        Elevate and we'll send you a password reset link.
       </h1>
 
       <div className="container col-md-4 offset-md-4 pb-5">
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={success ? handleResetPassword : handleSubmit}>
           <input
             type="email"
             className="form-control mb-2"
@@ -57,6 +85,27 @@ const ForgotPassword = () => {
             placeholder="Enter email"
             required
           />
+          {success && (
+            <>
+              <input
+                type="text"
+                className="form-control mb-2 "
+                value={code}
+                onChange={(e) => setCode(e.target.value)}
+                placeholder="Enter code"
+                required
+              />
+
+              <input
+                type="password"
+                className="form-control mb-2"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                placeholder="New Password"
+                required
+              />
+            </>
+          )}
           <br />
           <button
             type="submit"
